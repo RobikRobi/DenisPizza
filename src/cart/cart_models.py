@@ -7,6 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from user.user_enum import UserRole
 
 class Cart(Base):
+    __tablename__ = 'cart_table'
     id: Mapped[int] = mapped_column(primary_key=True)
  
     # user User? @relation(fields: [userId], references: [id])
@@ -22,6 +23,7 @@ class Cart(Base):
 #     updatedAt DateTime @updatedAt
 
 class CartItem(Base):
+    __tablename__ = 'cart_item'
     id: Mapped[int] = mapped_column(primary_key=True)
     
 #     productItem ProductItem @relation(fields: [productItemId], references: [id])

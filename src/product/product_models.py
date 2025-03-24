@@ -9,9 +9,9 @@ from user.user_enum import UserRole
 
 
 if typing.TYPE_CHECKING:
-    from src.ingridient.ingridient_shema import Ingredient
-    from src.category.category_shema import Category
-    from src.cart.cart_shema import CartItem
+    from ingridient.ingridient_models import Ingredient
+    from category.category_models import Category
+    from cart.cart_models import CartItem
 
 class Product(Base):
     __tablename__ = 'product_tabel'
@@ -31,6 +31,7 @@ class Product(Base):
 
 
 class ProductItem(Base):
+    __tablename__ = 'product_item'
     id: Mapped[int] = mapped_column(primary_key=True)
 
     price: Mapped[int]
@@ -40,7 +41,7 @@ class ProductItem(Base):
     product_id: Mapped[int] = mapped_column(ForeignKey('product.id', nullable=False))
     product: Mapped["Product"] = relationship(back_populates='items', uselist=False)
 
-    cart_items: Mapped["CartItem"] = relationship(back_populates="productItem")
+    cart_items: Mapped["CartItem"] = relationship(back_populates="product_item")
 
 
     createdAt: Mapped[DateTime] = mapped_column(default=datetime.now())

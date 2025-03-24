@@ -7,10 +7,11 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from user.user_enum import UserRole
 
 if typing.TYPE_CHECKING:
-    from src.product.product_shema import Product
+    from product.product_models import Product
 
 
 class Category(Base):
+    __tablename__ = 'category'
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(unique=True)
     products: Mapped[list["Product"]]  = relationship(back_populates="category", uselist=True) 
