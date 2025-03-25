@@ -13,6 +13,7 @@ if typing.TYPE_CHECKING:
 
 class VereficationCode(Base):
     __tablename__ = 'verification_table'
+    
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     user: Mapped["User"] = relationship(back_populates="vereficationCode", uselist=False)
 

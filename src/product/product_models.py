@@ -32,6 +32,7 @@ class Product(Base):
 
 class ProductItem(Base):
     __tablename__ = 'product_item'
+    
     id: Mapped[int] = mapped_column(primary_key=True)
 
     price: Mapped[int]
