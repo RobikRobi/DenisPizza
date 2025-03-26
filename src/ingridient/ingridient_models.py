@@ -11,7 +11,7 @@ if typing.TYPE_CHECKING:
     from src.cart.cart_models import CartItem
 
 class Ingredient(Base):
-    __tablename__ = 'ingredients'
+    __tablename__ = 'ingredients_tabel'
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]

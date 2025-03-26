@@ -25,7 +25,7 @@ class User(Base):
      provider: Mapped[str]
      providerId: Mapped[Optional[str | None]] = mapped_column(String, nullable=True)
      orders: Mapped[list["Order"]] = relationship(back_populates="user", uselist=True)    
-     cart: Mapped["Cart"] = relationship(uselist=False, nullable=True)
+     cart: Mapped["Cart"] = relationship(back_populates="user", uselist=False, nullable=True)
      vereficationCode: Mapped["VereficationCode"] = relationship(back_populates="user", uselist=False, nullable=True)
 
      createdAt: Mapped[DateTime] = mapped_column(default=datetime.now())
