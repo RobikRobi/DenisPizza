@@ -1,14 +1,13 @@
 import datetime
 import typing
 
-from sqlalchemy import DateTime, ForeignKey, String, JSON
+from sqlalchemy import DateTime, ForeignKey, String, JSON, Enum
 from src.db import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from user.user_enum import UserRole
-from src.orders.orders_enum import OrderStatus
+from src.enum.OrdersEnum import OrderStatus
 
 if typing.TYPE_CHECKING:
-    from src.user.user_models import User
+    from src.models.UserModel import User
 
 class Order(Base):
     __tablename__ = 'orders'
@@ -23,10 +22,10 @@ class Order(Base):
     token: Mapped[str]# token String
 
     totalAmout: Mapped[int]# totalAmount Int 
-    status: Mapped[OrderStatus]# status OrderStatus
+    status: Mapped[OrderStatus] = mapped_column(Enum(OrderStatus), nullable=False)# status OrderStatus
     paymenId: Mapped[str | None] = mapped_column(String, nullable=True)# paymentId String?
 
-    orderItem: Mapped[JSON]# orderItems Json
+    order_items: Mapped[dict] = mapped_column(JSON, nullable=False)# orderItems Json
 
     fullName: Mapped[str]# fullName String
     email: Mapped[str]# email String
@@ -34,5 +33,5 @@ class Order(Base):
     adress: Mapped[str]# address String
     comment: Mapped[str | None] = mapped_column(nullable=True)# comment String?    
 
-    createdAt: Mapped[DateTime] = mapped_column(default=datetime.now())
-    updatedAt: Mapped[DateTime] = mapped_column(onupdate=datetime.now())
+    # createdAt: Mapped[DateTime] = mapped_column(default=datetime.datetime.now(datetime.timezone.utc)) 
+    # updatedAt: Mapped[DateTime] = mapped_column(onupdate=datetime.datetime.now(datetime.timezone.utc))

@@ -1,16 +1,17 @@
 import datetime
 import typing
 
-from sqlalchemy import ForeignKey, String, Integer, DateTime
+from sqlalchemy import ForeignKey, Integer, DateTime
 from src.db import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from user.user_enum import UserRole
+from sqlalchemy.sql import func
 
 
 if typing.TYPE_CHECKING:
-    from src.user.user_models import User
-    from src.product.product_models import ProductItem
-    from src.ingridient.ingridient_models import Ingredient
+    from src.models.UserModel import User
+    from src.models.ProductModel import ProductItem
+    from src.models.IngridientModel import Ingredient
+
 
 class Cart(Base):
     __tablename__ = 'cart_table'
@@ -23,11 +24,12 @@ class Cart(Base):
     token: Mapped[str]# token String
     totalAmout: Mapped[int | None] = mapped_column(Integer, nullable=False, default=0)# totalAmount Int @default(0)
     cart_items: Mapped[list["CartItem"]] = relationship(back_populates="cart", uselist=True)#     cartItems CartItem[]
-    createdAt: Mapped[DateTime] = mapped_column(default=datetime.now())#     createdAt DateTime @default(now())
-    updatedAt: Mapped[DateTime] = mapped_column(onupdate=datetime.now())#     updatedAt DateTime @updatedAt
+    createdAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())#     createdAt DateTime @default(now())
+    updatedAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())#     updatedAt DateTime @updatedAt
 
 class CartItem(Base):
     __tablename__ = 'cart_item'
+
     id: Mapped[int] = mapped_column(primary_key=True)
     
     product_item: Mapped["ProductItem"] = relationship("ProductItem", back_populates="cart_items")#     productItem ProductItem @relation(fields: [productItemId], references: [id])
@@ -40,5 +42,5 @@ class CartItem(Base):
 
     ingridients: Mapped[list["Ingredient"]] = relationship(secondary="ingredients_tabel", back_populates="cart_items", uselist=True)#     ingridients Ingredient[]
 
-    createdAt: Mapped[DateTime] = mapped_column(default=datetime.now())#     createdAt DateTime @default(now())
-    updatedAt: Mapped[DateTime] = mapped_column(onupdate=datetime.now())#     updatedAt DateTime @updatedAt
+    createdAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())#     createdAt DateTime @default(now())
+    updatedAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())#     updatedAt DateTime @updatedAt

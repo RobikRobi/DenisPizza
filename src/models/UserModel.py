@@ -2,15 +2,17 @@ import datetime
 import typing
 from typing import Optional
 
-from sqlalchemy import String, DateTime 
+from sqlalchemy import String, DateTime, Enum
 from src.db import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from user.user_enum import UserRole
+from src.enum.UserEnum import UserRole
 
 if typing.TYPE_CHECKING:
-    from orders.orders_models import Order
-    from cart.cart_models import Cart
-    from src.verefication.verification_models import VereficationCode
+    from src.models.OrdersModel import Order
+    from src.models.CartModel import Cart
+    from src.models.VerificationModel import VereficationCode
+
+tz = datetime.timezone('UTC')
 
 class User(Base):
      __tablename__ = "user_table"
@@ -19,7 +21,7 @@ class User(Base):
      fullName: Mapped[str]
      email: Mapped[str] = mapped_column(String, unique=True)
      password: Mapped[str]
-     role: Mapped[UserRole] = mapped_column(default=UserRole.USER) 
+     role: Mapped[UserRole] = mapped_column(Enum(OrderStatus), nullable=False, default=UserRole.USER)
      verified: Mapped[datetime.date]
 
      provider: Mapped[str]
@@ -28,5 +30,5 @@ class User(Base):
      cart: Mapped["Cart"] = relationship(back_populates="user", uselist=False, nullable=True)
      vereficationCode: Mapped["VereficationCode"] = relationship(back_populates="user", uselist=False, nullable=True)
 
-     createdAt: Mapped[DateTime] = mapped_column(default=datetime.now())
-     updatedAt: Mapped[DateTime] = mapped_column(onupdate=datetime.now())
+    #  createdAt: Mapped[DateTime] = mapped_column(default=datetime.datetime.now(datetime.timezone.utc)) 
+    #  updatedAt: Mapped[DateTime] = mapped_column(onupdate=datetime.datetime.now(datetime.timezone.utc))

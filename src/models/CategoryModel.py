@@ -4,11 +4,9 @@ import typing
 from sqlalchemy import DateTime
 from src.db import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from user.user_enum import UserRole
 
 if typing.TYPE_CHECKING:
-    from product.product_models import Product
-
+    from src.models.ProductModel import Product
 
 class Category(Base):
     __tablename__ = 'category'
@@ -18,5 +16,5 @@ class Category(Base):
     products: Mapped[list["Product"]]  = relationship(back_populates="category", uselist=True) 
 
     
-    createdAt: Mapped[DateTime] = mapped_column(default=datetime.now())
-    updatedAt: Mapped[DateTime] = mapped_column(onupdate=datetime.now())
+    # createdAt: Mapped[DateTime] = mapped_column(default=datetime.datetime.now(datetime.timezone.utc)) 
+    # updatedAt: Mapped[DateTime] = mapped_column(onupdate=datetime.datetime.now(datetime.timezone.utc))

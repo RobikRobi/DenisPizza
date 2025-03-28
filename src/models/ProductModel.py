@@ -2,16 +2,16 @@ import datetime
 import typing
 from typing import Optional
 
-from sqlalchemy import DateTime, ForeignKey
+from sqlalchemy import DateTime, ForeignKey, Integer
 from src.db import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from user.user_enum import UserRole
 
 
 if typing.TYPE_CHECKING:
-    from ingridient.ingridient_models import Ingredient
-    from category.category_models import Category
-    from cart.cart_models import CartItem
+    from src.models.IngridientModel import Ingredient
+    from src.models.CategoryModel import Category
+    from src.models.CartModel import CartItem
+
 
 class Product(Base):
     __tablename__ = 'product_tabel'
@@ -26,8 +26,8 @@ class Product(Base):
     ingredients: Mapped[list["Ingredient"]] = relationship('Ingredient', secondary='product_ingredients', back_populates='products')
     items: Mapped[list["ProductItem"]] = relationship('ProductItem', back_populates='product')
 
-    createdAt: Mapped[DateTime] = mapped_column(default=datetime.now())
-    updatedAt: Mapped[DateTime] = mapped_column(onupdate=datetime.now())
+    # createdAt: Mapped[DateTime] = mapped_column(default=datetime.datetime.now(datetime.timezone.utc)) 
+    # updatedAt: Mapped[DateTime] = mapped_column(onupdate=datetime.datetime.now(datetime.timezone.utc))
 
 
 class ProductItem(Base):
@@ -36,8 +36,8 @@ class ProductItem(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
 
     price: Mapped[int]
-    size:Mapped[Optional[int]] #Int?
-    Mapped[Optional[int]] = mapped_column(nullable=True)
+    size: Mapped[int | None] = mapped_column(Integer, nullable=False)#Int?
+    pizzaType: Mapped[int | None] = mapped_column(Integer, nullable=False)
 
     product_id: Mapped[int] = mapped_column(ForeignKey('product.id', nullable=False))
     product: Mapped["Product"] = relationship(back_populates='items', uselist=False)
@@ -45,5 +45,5 @@ class ProductItem(Base):
     cart_items: Mapped["CartItem"] = relationship(back_populates="product_item")
 
 
-    createdAt: Mapped[DateTime] = mapped_column(default=datetime.now())
-    updatedAt: Mapped[DateTime] = mapped_column(onupdate=datetime.now())
+    # createdAt: Mapped[DateTime] = mapped_column(default=datetime.datetime.now(datetime.timezone.utc)) 
+    # updatedAt: Mapped[DateTime] = mapped_column(onupdate=datetime.datetime.now(datetime.timezone.utc))
