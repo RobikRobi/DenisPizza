@@ -4,6 +4,7 @@ import datetime
 from sqlalchemy import DateTime
 from src.db import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.sql import func
 
 
 if typing.TYPE_CHECKING:
@@ -14,7 +15,7 @@ if typing.TYPE_CHECKING:
 class Ingredient(Base):
     __tablename__ = 'ingredients_tabel'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str]
     price: Mapped[int]
     imageURL: Mapped[str]
@@ -23,7 +24,7 @@ class Ingredient(Base):
 
     cartItems: Mapped[list["CartItem"]] = relationship(back_populates="ingredient")#     cartItems CartItem[]
 
-    # createdAt: Mapped[DateTime] = mapped_column(default=datetime.datetime.now(datetime.timezone.utc)) 
-    # updatedAt: Mapped[DateTime] = mapped_column(onupdate=datetime.datetime.now(datetime.timezone.utc))
+    createdAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())#     createdAt DateTime @default(now())
+    updatedAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())# 
 
 

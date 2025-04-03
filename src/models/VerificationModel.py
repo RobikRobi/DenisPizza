@@ -5,6 +5,7 @@ import typing
 from sqlalchemy import DateTime
 from src.db import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.sql import func
 
 if typing.TYPE_CHECKING:
     from src.models.UserModel import User
@@ -20,5 +21,5 @@ class VereficationCode(Base):
 
     code: Mapped[str]
     
-    # createdAt: Mapped[DateTime] = mapped_column(default=datetime.datetime.now(datetime.timezone.utc)) 
-    # updatedAt: Mapped[DateTime] = mapped_column(onupdate=datetime.datetime.now(datetime.timezone.utc))
+    createdAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())#     createdAt DateTime @default(now())
+    updatedAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())# 

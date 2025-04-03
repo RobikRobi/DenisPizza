@@ -1,10 +1,10 @@
 import datetime
 import typing
-from typing import Optional
 
-from sqlalchemy import DateTime, ForeignKey, Integer
+from sqlalchemy import DateTime, ForeignKey
 from src.db import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.sql import func
 
 
 if typing.TYPE_CHECKING:
@@ -15,7 +15,7 @@ if typing.TYPE_CHECKING:
 
 class Product(Base):
     __tablename__ = 'product_tabel'
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
 
     name: Mapped[str]
     imageURL: Mapped[str]
@@ -26,18 +26,17 @@ class Product(Base):
     ingredients: Mapped[list["Ingredient"]] = relationship('Ingredient', secondary='product_ingredients', back_populates='products')
     items: Mapped[list["ProductItem"]] = relationship('ProductItem', back_populates='product')
 
-    # createdAt: Mapped[DateTime] = mapped_column(default=datetime.datetime.now(datetime.timezone.utc)) 
-    # updatedAt: Mapped[DateTime] = mapped_column(onupdate=datetime.datetime.now(datetime.timezone.utc))
-
+    createdAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())#     createdAt DateTime @default(now())
+    updatedAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())# 
 
 class ProductItem(Base):
     __tablename__ = 'product_item'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
 
     price: Mapped[int]
-    size: Mapped[int | None] = mapped_column(Integer, nullable=False)#Int?
-    pizzaType: Mapped[int | None] = mapped_column(Integer, nullable=False)
+    size: Mapped[int] = mapped_column(nullable=True)#Int?
+    pizzaType: Mapped[int] = mapped_column(nullable=True)
 
     product_id: Mapped[int] = mapped_column(ForeignKey('product.id', nullable=False))
     product: Mapped["Product"] = relationship(back_populates='items', uselist=False)
@@ -45,5 +44,5 @@ class ProductItem(Base):
     cart_items: Mapped["CartItem"] = relationship(back_populates="product_item")
 
 
-    # createdAt: Mapped[DateTime] = mapped_column(default=datetime.datetime.now(datetime.timezone.utc)) 
-    # updatedAt: Mapped[DateTime] = mapped_column(onupdate=datetime.datetime.now(datetime.timezone.utc))
+    createdAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())#     createdAt DateTime @default(now())
+    updatedAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())# 
