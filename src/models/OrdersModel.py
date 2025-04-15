@@ -15,16 +15,16 @@ class Order(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
 
-    userId: Mapped[int] = mapped_column(ForeignKey('users.id'))# userId Int? nullable=True
+    userId: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=True)# userId Int? nullable=True
 
     user: Mapped["User"] = relationship(back_populates="orders")# user: User? @relation(fields: [userId], references: [id])
     
 
     token: Mapped[str]# token String
 
-    totalAmout: Mapped[int]# totalAmount Int 
+    totalAmount: Mapped[int]# totalAmount Int 
     status: Mapped[OrderStatus] = mapped_column(Enum(OrderStatus))# status OrderStatus
-    paymenId: Mapped[str] = mapped_column(nullable=True)# paymentId String?
+    paymentId: Mapped[str] = mapped_column(nullable=True)# paymentId String?
 
     order_items: Mapped[dict] = mapped_column(JSON, nullable=False)# orderItems Json
 
@@ -35,4 +35,4 @@ class Order(Base):
     comment: Mapped[str] = mapped_column(nullable=True)# comment String?    
 
     createdAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())#     createdAt DateTime @default(now())
-    updatedAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())# 
+    updatedAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())# 

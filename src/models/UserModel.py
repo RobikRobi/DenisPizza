@@ -11,9 +11,8 @@ from sqlalchemy.sql import func
 if typing.TYPE_CHECKING:
     from src.models.OrdersModel import Order
     from src.models.CartModel import Cart
-    from src.models.VerificationModel import VereficationCode
+    from models.VereficationModel import VereficationCode
 
-tz = datetime.timezone('UTC')
 
 class User(Base):
      __tablename__ = "user_table"
@@ -23,13 +22,13 @@ class User(Base):
      email: Mapped[str] = mapped_column(String, unique=True)
      password: Mapped[str]
      role: Mapped[UserRole] = mapped_column(Enum(UserRole), default=UserRole.USER)
-     verified: Mapped[datetime.date]
+     verefied: Mapped[Optional[datetime.date]] = mapped_column(nullable=True)
 
      provider: Mapped[str]
      providerId: Mapped[Optional[str]] = mapped_column(nullable=True)
      orders: Mapped[list["Order"]] = relationship(back_populates="user", uselist=True)    
-     cart: Mapped["Cart"] = relationship(back_populates="user", uselist=False, nullable=True)
-     vereficationCode: Mapped["VereficationCode"] = relationship(back_populates="user", uselist=False, nullable=True)
+     cart: Mapped["Cart"] = relationship(back_populates="user", uselist=False)
+     vereficationCode: Mapped["VereficationCode"] = relationship(back_populates="user", uselist=False)
 
      createdAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())#     createdAt DateTime @default(now())
-     updatedAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())# 
+     updatedAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())# 

@@ -13,7 +13,7 @@ if typing.TYPE_CHECKING:
 
 
 class Ingredient(Base):
-    __tablename__ = 'ingredients_tabel'
+    __tablename__ = 'ingredients_table'
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str]
@@ -22,9 +22,9 @@ class Ingredient(Base):
 
     products: Mapped[list["Product"]] = relationship(secondary="product_ingredients", back_populates="ingredients")#     products Product[]
 
-    cartItems: Mapped[list["CartItem"]] = relationship(back_populates="ingredient")#     cartItems CartItem[]
+    cart_items: Mapped[list["CartItem"]] =  relationship(secondary="cartItem_ingredients", back_populates="ingredients")#     cartItems CartItem[]
 
     createdAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())#     createdAt DateTime @default(now())
-    updatedAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())# 
+    updatedAt: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())# 
 
 

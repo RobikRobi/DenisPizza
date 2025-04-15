@@ -1,9 +1,13 @@
 from fastapi import FastAPI
-import uvicorn
 from src.db import engine, Base
 from binascii import Error
 
+from src.auth.auth_router import app as auth_app
+
+
 app = FastAPI()
+
+app.include_router(auth_app)
 
 @app.get("/")
 async def read_root():
